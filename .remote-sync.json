@@ -1,0 +1,16 @@
+{
+  "uploadOnSave": false,
+  "useAtomicWrites": false,
+  "deleteLocal": false,
+  "hostname": "192.168.88.253",
+  "port": "22",
+  "target": "/var/www/engine/",
+  "ignore": [
+    ".remote-sync.json",
+    ".git/**"
+  ],
+  "username": "root",
+  "password": "daloradius",
+  "watch": [],
+  "transport": "scp"
+}
