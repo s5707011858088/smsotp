@@ -7,7 +7,7 @@ class DB_Functions {
     //put your code here
     // constructor
     function __construct() {
-        include_once '/var/www/engine/db_connect.php';
+        include_once '/var/www/html/engine/db_connect.php';
         // connecting to database
         $this->db = new DB_Connect();
         $this->db->connect();
@@ -19,38 +19,40 @@ class DB_Functions {
     }
 
 	public function getrad(){
-	$result = mysql_query("SELECT * FROM radcheck");
+  $link = mysqli_connect("localhost", "radius", "password", "radius");
+	$result = mysqli_query($link,"SELECT * FROM radcheck");
 	return $result;
 	}
 
 	public function getuserdot1x(){
-		$result = mysql_query("SELECT * FROM `radacct` WHERE `acctstoptime` is NULL AND nasporttype = 'Wireless-802.11'");
+    $link = mysqli_connect("localhost", "radius", "password", "radius");
+		$result = mysqli_query($link,"SELECT * FROM `radacct` WHERE `acctstoptime` is NULL AND nasporttype = 'Wireless-802.11'");
 		return $result;
 	}
 	public function getuserhotspot(){
-		$result = mysql_query("SELECT * FROM `radacct` WHERE `acctstoptime` is NULL AND nasporttype = 'Ethernet'");
+    $link = mysqli_connect("localhost", "radius", "password", "radius");
+		$result = mysqli_query($link,"SELECT * FROM `radacct` WHERE `acctstoptime` is NULL AND nasporttype = 'Ethernet'");
 		return $result;
 	}
 
 	public function getuserpass(){
-		$result = mysql_query("SELECT `username`,`value` FROM `radcheck` ");
+    $link = mysqli_connect("localhost", "radius", "password", "radius");
+		$result = mysqli_query($link,"SELECT `username`,`value` FROM `radcheck` ");
 		return $result;
 	}
 
 	public function updatepass($user,$pass){
-		$result = mysql_query("UPDATE `radcheck` SET value='$pass' WHERE username='$user'");
+    $link = mysqli_connect("localhost", "radius", "password", "radius");
+		$result = mysqli_query($link,"UPDATE `radcheck` SET value='$pass' WHERE username='$user'");
 	}
 
   public function getMobile($user){
     //$pass = md5($pass);
-    $result = mysql_query("SELECT username,mobilephone FROM userinfo WHERE `username` = $user");
-    if (mysql_num_rows($result) > 0) {
-        $data = mysql_fetch_array($result);
-        $return $data['mobilephone'];
-    } else {
-        return false;
-    }
-
+    $link = mysqli_connect("localhost", "radius", "password", "radius");
+    $result = mysqli_query($link,"SELECT `username`,`mobilephone` FROM userinfo WHERE `username` = '$user'");
+    $data = mysqli_fetch_array($result);
+    return $data['mobilephone'];
+  }
 }
 
 ?>

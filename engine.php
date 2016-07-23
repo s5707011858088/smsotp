@@ -1,7 +1,7 @@
 <?php
 error_reporting(E_ALL ^ E_NOTICE);
-include_once '/var/www/engine/db_functions.php';
-include_once '/var/www/engine/sms.php';
+include_once '/var/www/html/engine/db_functions.php';
+include_once '/var/www/html/engine/sms.php';
 /*
 $to = "sitita_charuraks@hotmail.com";
 $subject = "My subject";
@@ -17,31 +17,40 @@ $userpass = originaluserpass();
 
 while(true){
 $userdot1x = checkuserdot1x();
-	for($i=0; $i<$userpass[3][3]; $i++){
+//print $userpass[3][3];
+	for($i=0; $i<=$userpass[3][3]; $i++){
+		//print $userpass[3][3]." AND "."\n";
 		foreach($userdot1x as $user){
-			if($user==$userpass[0][$i] && $userpass[2][$i]==0){
+			print $user." AND ".$userpass[0][1]."\n";
+			if($user==$userpass[0][$i]&& $userpass[0][$i]==0){
 				genuser($user);
 				$userpass[2][$i] = 1;
+			}else{
+				print "Not Match Dot1X"."\n";
 			}
 		}
 	}
 
 $userhotspot = checkuserhotspot();
+print $userpass[3][3]."\n";
 	for($i=0; $i<$userpass[3][3]; $i++){
 		foreach($userhotspot as $user){
 			if($user==$userpass[0][$i] && $userpass[2][$i]==1){
 				turnbackuser($user,$userpass[1][$i]);
-				print "TurnbackUser Hotspot "+$user;
+				print "TurnbackUser Hotspot ".$user."\n";
 				$userpass[2][$i] = 0;
+			}else{
+				print "Not Match Hotspot"."\n";
 			}
 		}
 	}
 
-	sleep(5);
+	sleep(15);
 }
 
 
 function genuser($user){
+	print "****GENUSER****";
 	$db = new DB_Functions();
 	$pass = randomPassword();
 	$mobile = $db->getMobile($user);
@@ -62,12 +71,12 @@ function turnbackuser($user,$pass){
 //print(randomPassword());
 
 function checkuserdot1x(){
-	print "checkuserdot1x Function ====================";
+	print "checkuserdot1x Function ===================="."\n";
 	$db = new DB_Functions();
 	$res = $db->getuserdot1x();
 	$username;
 	$count = 0;
-	while($fetch = mysql_fetch_array($res)){
+	while($fetch = mysqli_fetch_array($res)){
 		print $username[$count] = $fetch[3];
 		$count++;
 	}
@@ -75,26 +84,27 @@ function checkuserdot1x(){
 }
 
 function checkuserhotspot(){
-	print "checkuserhotspot Function ====================";
+	print "checkuserhotspot Function ===================="."\n";
 	$db = new DB_Functions();
 	$res = $db->getuserhotspot();
 	$username;
 	$count = 0;
-	while($fetch = mysql_fetch_array($res)){
-		print $username[$count] = $fetch[3];
+	while($fetch = mysqli_fetch_array($res)){
+		 $username[$count] = $fetch[3];
 		$count++;
 	}
 	return $username;
 }
 
 function originaluserpass(){
-	print "originaluserpass Function ====================";
+	print "originaluserpass Function ===================="."\n";
 	$db = new DB_Functions();
 	$res = $db->getuserpass();
 	//$userpass;
 	$count = 0;
-	while($fetch = mysql_fetch_array($res)) {
+	while($fetch = mysqli_fetch_array($res)) {
 		 $userpass[0][$count] = $fetch[0];
+		 print $userpass[0][$count]."*****"."\n";
 		 $userpass[1][$count] = $fetch[1];
 		 $userpass[2][$count] = 0;
 		 $userpass[3][3] = $count;
@@ -105,7 +115,7 @@ function originaluserpass(){
 }
 
 function randomPassword() {
-	print "randomPassword Function ====================";
+	print "randomPassword Function ===================="."\n";
     $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
     $pass = array(); //remember to declare $pass as an array
     $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
@@ -119,8 +129,8 @@ function randomPassword() {
 function sendsms($mobile,$pass){
 	$sms = new thsms();
 
-	$sms->username   = 'username';
-	$sms->password   = 'password';
+	$sms->username   = 'gigared';
+	$sms->password   = '4351828';
 
 	$a = $sms->getCredit();
 	var_dump( $a);
